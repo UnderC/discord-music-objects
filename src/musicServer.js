@@ -5,13 +5,13 @@ const MusicPlayer = require('./musicPlayer')
 class MusicServer extends events.EventEmitter {
   constructor () {
     super()
-    this.player = null // 비어있으면 join을 제외한 모든 명령을 무시
-    this.isPlaying = false // true 면 start 명령을 무시
-    this.skipSafe = false // true 면 dispatcher 이벤트 종료 후 재귀 벗어남
-    this.queue = new MusicQueue() // 모듈 참고
+    this.player = null
+    this.isPlaying = false
+    this.skipSafe = false
+    this.queue = new MusicQueue()
     this.nowPlaying = null
-    this.dispatcher = null // 비어있을면 재생 불가
-    this.volume = 0.5 // 0 이면 소리가 나지 않음
+    this.dispatcher = null
+    this.volume = 0.5
     this.repeat = false
     this.handled = false
     this._ = new MusicPlayer(this)
@@ -28,6 +28,7 @@ class MusicServer extends events.EventEmitter {
 
     this.stop(true)
     this.clear()
+    return true
   }
 
   move (voiceChannel) {
@@ -36,12 +37,14 @@ class MusicServer extends events.EventEmitter {
 
     this.leave(true)
     this.join(voiceChannel)
+    return true
   }
 
   stop () {
     if (!this.dispatcher) return
     this.skipSafe = true
     this.dispatcher.end()
+    return true
   }
 
   setVolume (vol) {
@@ -61,6 +64,7 @@ class MusicServer extends events.EventEmitter {
   skip () {
     if (!this.dispatcher) return
     this.dispatcher.end()
+    return true
   }
 
   clear () {
